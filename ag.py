@@ -9,28 +9,39 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 HYPERPARAMETER_SPACE = {
-    'num_pc_filters': {'type': int, 'min': 1, 'max': 10},
-    'num_lhr_filters': {'type': int, 'min': 1, 'max': 10},
-    'num_ghr_ga_filters': {'type': int, 'min': 1, 'max': 10},
-    'num_xor_filters': {'type': int, 'min': 1, 'max': 10},
+    'num_pc_filters': {'type': int, 'min': 2, 'max': 16},
+    'num_lhr_filters': {'type': int, 'min': 1, 'max': 16},
+    'num_ghr_filters': {'type': int, 'min': 1, 'max': 16},
+    'num_ga_filters': {'type': int, 'min': 1, 'max': 16},
+    'num_xor_filters': {'type': int, 'min': 1, 'max': 16},
     'pc_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'lhr_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'ght_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
+    'ghr_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
+    'ga_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'xor_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'pc_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
-    'lhr_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
-    'ght_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
-    'xor_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
-    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02}, # Para pesos, pode usar 'step'
-    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
-    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
-    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'pc_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
+    'lhr_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
+    'ghr_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
+    'ga_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
+    'xor_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
+    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05}, # Para pesos, pode usar 'step'
+    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
+    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
+    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
+    'ghr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
+    'pc_num_hashes': {'type': int, 'min': 1, 'max': 10},
+    'lhr_num_hashes': {'type': int, 'min': 1, 'max': 10},
+    'ghr_num_hashes': {'type': int, 'min': 1, 'max': 10},
+    'ga_num_hashes': {'type': int, 'min': 1, 'max': 10},
+    'xor_num_hashes': {'type': int, 'min': 1, 'max': 10},
+    'ghr_size': {'type': int, 'min': 1, 'max': 300},
+    'ga_branches': {'type': int, 'min': 1, 'max': 300},
 }
 
-POPULATION_SIZE = 30
-NUM_GENERATIONS = 15
-MUTATION_RATE = 0.4
-CROSSOVER_RATE = 0.85
+POPULATION_SIZE = 20
+NUM_GENERATIONS = 50
+MUTATION_RATE = 0.3
+CROSSOVER_RATE = 0.8
 ELITISM_COUNT = 2 # Quantos melhores indivíduos passam direto para a próxima geração
 
 def generate_individual() -> dict:

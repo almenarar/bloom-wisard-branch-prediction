@@ -8,20 +8,31 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
     model_params_list = [
         params['num_pc_filters'],
         params['num_lhr_filters'],
-        params['num_ghr_ga_filters'],
+        params['num_ghr_filters'],
+        params['num_ga_filters'],
         params['num_xor_filters'], # ... e assim por diante para todos os lhrN_times
         params['pc_lut_addr_size'],
         params['lhr_lut_addr_size'],
-        params['ght_lut_addr_size'],
+        params['ghr_lut_addr_size'],
+        params['ga_lut_addr_size'],
         params['xor_lut_addr_size'],
         params['pc_bleaching_threshold'],
         params['lhr_bleaching_threshold'],
-        params['ght_bleaching_threshold'],
+        params['ghr_bleaching_threshold'],
+        params['ga_bleaching_threshold'],
         params['xor_bleaching_threshold'],
         params['pc_tournament_weight'], # Seed fixa para a AG, ou otimize ela tbm
         params['lhr_tournament_weight'],
         params['ga_tournament_weight'],
         params['xor_tournament_weight'],
+        params['ghr_tournament_weight'],
+        params['pc_num_hashes'],
+        params['lhr_num_hashes'],
+        params['ghr_num_hashes'],
+        params['ga_num_hashes'],
+        params['xor_num_hashes'],
+        params['ghr_size'],
+        params['ga_branches'],
     ]
 
     # Crie uma instância do Model com esses parâmetros
