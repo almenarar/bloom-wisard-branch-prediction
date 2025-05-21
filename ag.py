@@ -9,27 +9,28 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 HYPERPARAMETER_SPACE = {
-    'num_pc_filters': {'type': int, 'min': 2, 'max': 16},
-    'num_lhr_filters': {'type': int, 'min': 1, 'max': 16},
-    'num_ghr_ga_filters': {'type': int, 'min': 1, 'max': 16},
-    'num_xor_filters': {'type': int, 'min': 1, 'max': 16},
+    'num_pc_filters': {'type': int, 'min': 1, 'max': 10},
+    'num_lhr_filters': {'type': int, 'min': 1, 'max': 10},
+    'num_ghr_ga_filters': {'type': int, 'min': 1, 'max': 10},
+    'num_xor_filters': {'type': int, 'min': 1, 'max': 10},
     'pc_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'lhr_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'ght_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'xor_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'pc_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'lhr_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'ght_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'xor_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05}, # Para pesos, pode usar 'step'
-    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
+    'pc_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
+    'lhr_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
+    'ght_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
+    'xor_bleaching_threshold': {'type': int, 'min': 0, 'max': 2000},
+    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02}, # Para pesos, pode usar 'step'
+    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
 }
-POPULATION_SIZE = 20
-NUM_GENERATIONS = 50
-MUTATION_RATE = 0.1
-CROSSOVER_RATE = 0.8
+
+POPULATION_SIZE = 30
+NUM_GENERATIONS = 15
+MUTATION_RATE = 0.4
+CROSSOVER_RATE = 0.85
 ELITISM_COUNT = 2 # Quantos melhores indivíduos passam direto para a próxima geração
 
 def generate_individual() -> dict:
@@ -129,7 +130,6 @@ def mutate(individual: dict) -> dict:
 
 def genetic_algorithm(input_file: str):
     num_processes = multiprocessing.cpu_count()
-    print(num_processes)
 
     population = create_initial_population(POPULATION_SIZE)
     best_individual = None
@@ -192,10 +192,14 @@ def genetic_algorithm(input_file: str):
 
 # Exemplo de uso:
 if __name__ == '__main__':
+    import argparse
+    parser = argparse.ArgumentParser(description="BTHOWeN Predictor")
+    parser.add_argument("input_file", type=str)
+    args = parser.parse_args()
     # Certifique-se de que este caminho do arquivo de entrada seja válido para o AG
     # Use um subconjunto do seu arquivo de traço para agilizar a otimização!
     # Por exemplo, crie um "trace_sample.txt" com 10.000 a 100.000 linhas
-    sample_input_file = "/Users/almenara/Downloads/branch_prediction/Dataset_pc_decimal/I1.txt" 
+    sample_input_file = f"/home/almenara/bloom-wisard-branch-prediction/Dataset_pc_decimal/{args.input_file}.txt" 
 
     # Execute o algoritmo genético
     best_params, final_best_fitness = genetic_algorithm(sample_input_file)

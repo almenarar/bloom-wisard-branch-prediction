@@ -62,7 +62,7 @@ class Model:
             self.lhrs.append(np.zeros((lhr_size, length), dtype=np.uint8))
 
         # Inicializa o endereço global
-        self.ga_lower = 8
+        self.ga_lower = 16
         self.ga_branches = 8
         self.ga = np.zeros(self.ga_lower * self.ga_branches, dtype=np.uint8)
 

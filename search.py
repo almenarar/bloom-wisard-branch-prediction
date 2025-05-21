@@ -31,7 +31,7 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
     accuracies = []
     num_branches = 0
     num_predicted = 0
-    interval = 10000
+    interval = 2000
     max_lines = 50000
     with open(input_file, "r") as f:
         for line in f:
