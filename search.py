@@ -6,31 +6,31 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
     # Mapeie o dicionário 'params' para a lista de parâmetros esperada pelo seu Model
     # Exemplo (ajuste os índices conforme seu Model __init__):
     model_params_list = [
-        params['num_pc_filters'],
-        params['num_lhr_filters'],
-        params['num_ghr_filters'],
-        params['num_ga_filters'],
-        params['num_xor_filters'], # ... e assim por diante para todos os lhrN_times
+        1,#params['num_pc_filters'],
+        1,#params['num_lhr_filters'],
+        1,#params['num_ghr_filters'],
+        1,#params['num_ga_filters'],
+        1,#params['num_xor_filters'], # ... e assim por diante para todos os lhrN_times
         params['pc_lut_addr_size'],
         params['lhr_lut_addr_size'],
         params['ghr_lut_addr_size'],
         params['ga_lut_addr_size'],
         params['xor_lut_addr_size'],
-        params['pc_bleaching_threshold'],
-        params['lhr_bleaching_threshold'],
-        params['ghr_bleaching_threshold'],
-        params['ga_bleaching_threshold'],
-        params['xor_bleaching_threshold'],
+        2000,#params['pc_bleaching_threshold'],
+        2000,#params['lhr_bleaching_threshold'],
+        2000,#params['ghr_bleaching_threshold'],
+        2000,#params['ga_bleaching_threshold'],
+        2000,#params['xor_bleaching_threshold'],
         params['pc_tournament_weight'], # Seed fixa para a AG, ou otimize ela tbm
         params['lhr_tournament_weight'],
         params['ga_tournament_weight'],
         params['xor_tournament_weight'],
         params['ghr_tournament_weight'],
-        params['pc_num_hashes'],
-        params['lhr_num_hashes'],
-        params['ghr_num_hashes'],
-        params['ga_num_hashes'],
-        params['xor_num_hashes'],
+        3,#params['pc_num_hashes'],
+        3,#params['lhr_num_hashes'],
+        3,#params['ghr_num_hashes'],
+        3,#params['ga_num_hashes'],
+        3,#params['xor_num_hashes'],
         params['ghr_size'],
         params['ga_branches'],
     ]
@@ -53,8 +53,8 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
             num_branches += 1
             if predictor.predict_and_train(pc, outcome):
                 num_predicted += 1
-            if num_branches % interval == 0:
-                predictor.apply_bleaching()
+            #if num_branches % interval == 0:
+            #    predictor.apply_bleaching()
 
     if num_branches == 0:
         return 0.0 # Evita divisão por zero

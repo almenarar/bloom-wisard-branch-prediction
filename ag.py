@@ -9,40 +9,42 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 HYPERPARAMETER_SPACE = {
-    'num_pc_filters': {'type': int, 'min': 2, 'max': 16},
-    'num_lhr_filters': {'type': int, 'min': 1, 'max': 16},
-    'num_ghr_filters': {'type': int, 'min': 1, 'max': 16},
-    'num_ga_filters': {'type': int, 'min': 1, 'max': 16},
-    'num_xor_filters': {'type': int, 'min': 1, 'max': 16},
-    'pc_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'lhr_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'ghr_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'ga_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'xor_lut_addr_size': {'type': int, 'min': 1, 'max': 32},
-    'pc_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'lhr_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'ghr_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'ga_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'xor_bleaching_threshold': {'type': int, 'min': 0, 'max': 20},
-    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05}, # Para pesos, pode usar 'step'
-    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'ghr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.05},
-    'pc_num_hashes': {'type': int, 'min': 1, 'max': 10},
-    'lhr_num_hashes': {'type': int, 'min': 1, 'max': 10},
-    'ghr_num_hashes': {'type': int, 'min': 1, 'max': 10},
-    'ga_num_hashes': {'type': int, 'min': 1, 'max': 10},
-    'xor_num_hashes': {'type': int, 'min': 1, 'max': 10},
-    'ghr_size': {'type': int, 'min': 1, 'max': 300},
-    'ga_branches': {'type': int, 'min': 1, 'max': 300},
+    #'num_pc_filters': {'type': int, 'min': 3, 'max': 3},
+    #'num_lhr_filters': {'type': int, 'min': 3, 'max': 3},
+    #'num_ghr_filters': {'type': int, 'min': 3, 'max': 3},
+    #'num_ga_filters': {'type': int, 'min': 3, 'max': 3},
+    #'num_xor_filters': {'type': int, 'min': 3, 'max': 3},
+    'pc_lut_addr_size': {'type': int, 'min': 2, 'max': 32},
+    'lhr_lut_addr_size': {'type': int, 'min': 2, 'max': 32},
+    'ghr_lut_addr_size': {'type': int, 'min': 2, 'max': 32},
+    'ga_lut_addr_size': {'type': int, 'min': 2, 'max': 32},
+    'xor_lut_addr_size': {'type': int, 'min': 2, 'max': 32},
+    #'pc_bleaching_threshold': {'type': int, 'min': 200, 'max': 200},
+    #'lhr_bleaching_threshold': {'type': int, 'min': 200, 'max': 200},
+    #'ghr_bleaching_threshold': {'type': int, 'min': 200, 'max': 200},
+    #'ga_bleaching_threshold': {'type': int, 'min': 200, 'max': 200},
+    #'xor_bleaching_threshold': {'type': int, 'min': 200, 'max': 200},
+    'pc_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02}, # Para pesos, pode usar 'step'
+    'lhr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'xor_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'ga_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    'ghr_tournament_weight': {'type': float, 'min': 0.0, 'max': 1.0, 'step': 0.02},
+    #'pc_num_hashes': {'type': int, 'min': 3, 'max': 3},
+    #'lhr_num_hashes': {'type': int, 'min': 3, 'max': 3},
+    #'ghr_num_hashes': {'type': int, 'min': 3, 'max': 3},
+    #'ga_num_hashes': {'type': int, 'min': 3, 'max': 3},
+    #'xor_num_hashes': {'type': int, 'min': 3, 'max': 3},
+    'ghr_size': {'type': int, 'min': 1, 'max': 2000},
+    'ga_branches': {'type': int, 'min': 1, 'max': 2000},
 }
 
 POPULATION_SIZE = 20
 NUM_GENERATIONS = 50
-MUTATION_RATE = 0.3
-CROSSOVER_RATE = 0.8
+MUTATION_RATE = 0.15
+CROSSOVER_RATE = 0.85
 ELITISM_COUNT = 2 # Quantos melhores indivíduos passam direto para a próxima geração
+STAGNATION_THRESHOLD = 3 # Número de gerações sem melhoria para reiniciar
+RESTART_ELITISM_COUNT = 2 # Quantos melhores indivíduos manter no reinício
 
 def generate_individual() -> dict:
     individual = {}
@@ -57,12 +59,13 @@ def generate_individual() -> dict:
             else:
                 individual[param] = val
 
-    total_weight = individual['pc_tournament_weight'] + individual['lhr_tournament_weight'] + individual['xor_tournament_weight'] + individual['ga_tournament_weight']
+    total_weight = individual['pc_tournament_weight'] + individual['lhr_tournament_weight'] + individual['xor_tournament_weight'] + individual['ga_tournament_weight'] + individual['ghr_tournament_weight']
     if total_weight > 0:
         individual['pc_tournament_weight'] /= total_weight
         individual['lhr_tournament_weight'] /= total_weight
         individual['xor_tournament_weight'] /= total_weight
         individual['ga_tournament_weight'] /= total_weight
+        individual['ghr_tournament_weight'] /= total_weight
     return individual
 
 def create_initial_population(size: int) -> List[dict]:
@@ -103,18 +106,20 @@ def crossover(parent1: dict, parent2: dict) -> Tuple[dict, dict]:
 
         # Re-normalizar pesos após crossover se eles foram combinados
         if 'pc_tournament_weight' in child1:
-            total_weight1 = child1['pc_tournament_weight'] + child1['lhr_tournament_weight'] + child1['ga_tournament_weight'] + child1['xor_tournament_weight']
-            total_weight2 = child2['pc_tournament_weight'] + child2['lhr_tournament_weight'] + child2['ga_tournament_weight'] + child2['xor_tournament_weight']
+            total_weight1 = child1['pc_tournament_weight'] + child1['lhr_tournament_weight'] + child1['ga_tournament_weight'] + child1['xor_tournament_weight'] + child1['ghr_tournament_weight']
+            total_weight2 = child2['pc_tournament_weight'] + child2['lhr_tournament_weight'] + child2['ga_tournament_weight'] + child2['xor_tournament_weight'] + child2['ghr_tournament_weight']
             if total_weight1 > 0:
                 child1['pc_tournament_weight'] /= total_weight1
                 child1['lhr_tournament_weight'] /= total_weight1
                 child1['ga_tournament_weight'] /= total_weight1
                 child1['xor_tournament_weight'] /= total_weight1
+                child1['ghr_tournament_weight'] /= total_weight1
             if total_weight2 > 0:
                 child2['pc_tournament_weight'] /= total_weight2
                 child2['lhr_tournament_weight'] /= total_weight2
                 child2['ga_tournament_weight'] /= total_weight2
                 child2['xor_tournament_weight'] /= total_weight2
+                child2['ghr_tournament_weight'] /= total_weight2
     return child1, child2
 
 def mutate(individual: dict) -> dict:
@@ -131,12 +136,13 @@ def mutate(individual: dict) -> dict:
                     mutated_individual[param] = val
     # Re-normalizar pesos após mutação
     if 'pc_tournament_weight' in mutated_individual:
-        total_weight = mutated_individual['pc_tournament_weight'] + mutated_individual['lhr_tournament_weight'] + mutated_individual['ga_tournament_weight'] + mutated_individual['xor_tournament_weight']
+        total_weight = mutated_individual['pc_tournament_weight'] + mutated_individual['lhr_tournament_weight'] + mutated_individual['ga_tournament_weight'] + mutated_individual['xor_tournament_weight'] + mutated_individual['ghr_tournament_weight']
         if total_weight > 0:
             mutated_individual['pc_tournament_weight'] /= total_weight
             mutated_individual['lhr_tournament_weight'] /= total_weight
             mutated_individual['ga_tournament_weight'] /= total_weight
             mutated_individual['xor_tournament_weight'] /= total_weight
+            mutated_individual['ghr_tournament_weight'] /= total_weight
     return mutated_individual
 
 def genetic_algorithm(input_file: str):
@@ -145,6 +151,11 @@ def genetic_algorithm(input_file: str):
     population = create_initial_population(POPULATION_SIZE)
     best_individual = None
     best_fitness = -1.0
+    generations_since_last_improvement = 0 # Contador de estagnação
+    
+    # Armazena o melhor indivíduo geral encontrado
+    global_best_individual = None
+    global_best_fitness = -1.0
 
     with ProcessPoolExecutor(max_workers=num_processes) as executor:
         for generation in range(NUM_GENERATIONS):
@@ -156,6 +167,8 @@ def genetic_algorithm(input_file: str):
             }
 
             population_with_fitness = []
+            current_generation_best_fitness = -1.0 # Melhor fitness desta geração
+
             for i, future in enumerate(as_completed(futures)):
                 individual = futures[future]
                 try:
@@ -163,38 +176,62 @@ def genetic_algorithm(input_file: str):
                     population_with_fitness.append((individual, fitness))
                     print(f"  Indivíduo {i+1}: Aptidão = {fitness:.2f}%")
 
-                    if fitness > best_fitness:
-                        best_fitness = fitness
-                        best_individual = individual.copy()
+                    if fitness > current_generation_best_fitness:
+                        current_generation_best_fitness = fitness
+
+                    if fitness > global_best_fitness:
+                        global_best_fitness = fitness
+                        global_best_individual = individual.copy()
+                        generations_since_last_improvement = 0 # Resetar contador se houver melhoria global
                 except Exception as exc:
                     print(f"  Indivíduo {i+1} gerou uma exceção: {exc}", file=sys.stderr)
                     # O indivíduo que gerou exceção já terá fitness 0.0 da função run_predictor_with_params
 
-            # Ordenar a população por aptidão (do maior para o menor)
-            population_with_fitness.sort(key=lambda x: x[1], reverse=True)
+            # Verifica estagnação e reinicia a população se necessário
+            if current_generation_best_fitness <= (global_best_fitness):
+                generations_since_last_improvement += 1
+                print(f"Estagnação detectada: {generations_since_last_improvement}/{STAGNATION_THRESHOLD} gerações sem melhora significativa.")
+            else:
+                generations_since_last_improvement = 0 # Melhoria significativa, resetar contador
+
+            if generations_since_last_improvement >= STAGNATION_THRESHOLD:
+                print(f"Limite de estagnação atingido ({STAGNATION_THRESHOLD} gerações)! Reiniciando população...")
+                
+                # Ordenar a população por aptidão (do maior para o menor)
+                population_with_fitness.sort(key=lambda x: x[1], reverse=True)
+
+                new_population = []
+                # Manter os melhores indivíduos do reinício
+                for i in range(min(RESTART_ELITISM_COUNT, POPULATION_SIZE)):
+                    new_population.append(population_with_fitness[i][0])
+                
+                # Gerar o restante da população aleatoriamente
+                while len(new_population) < POPULATION_SIZE:
+                    new_population.append(generate_individual())
+                
+                population = new_population
+                generations_since_last_improvement = 0 # Resetar após o reinício
+                # Não precisa resetar global_best_fitness, pois queremos o melhor geral
+                
+            else: # Se não houver reinício, continue com a evolução normal
+                population_with_fitness.sort(key=lambda x: x[1], reverse=True)
+                new_population = []
+                for i in range(min(ELITISM_COUNT, POPULATION_SIZE)):
+                    new_population.append(population_with_fitness[i][0])
+
+                while len(new_population) < POPULATION_SIZE:
+                    parent1, parent2 = select_parents(population_with_fitness)
+                    child1, child2 = crossover(parent1, parent2)
+                    mutated_child1 = mutate(child1)
+                    mutated_child2 = mutate(child2)
+                    new_population.append(mutated_child1)
+                    if len(new_population) < POPULATION_SIZE:
+                        new_population.append(mutated_child2)
+                population = new_population
 
             print(f"Melhor aptidão da geração: {population_with_fitness[0][1]:.2f}%")
-            print(f"Melhor aptidão geral até agora: {best_fitness:.2f}%")
-            # Para evitar saída muito longa, imprime apenas os melhores parâmetros
-            # print(f"Melhores parâmetros até agora: {best_individual}")
-
-            # Criar a próxima geração
-            new_population = []
-            # Elitismo: Mantém os melhores indivíduos
-            for i in range(min(ELITISM_COUNT, POPULATION_SIZE)):
-                new_population.append(population_with_fitness[i][0])
-
-            # Preencher o resto da nova população
-            while len(new_population) < POPULATION_SIZE:
-                parent1, parent2 = select_parents(population_with_fitness)
-                child1, child2 = crossover(parent1, parent2)
-                mutated_child1 = mutate(child1)
-                mutated_child2 = mutate(child2)
-                new_population.append(mutated_child1)
-                if len(new_population) < POPULATION_SIZE:
-                    new_population.append(mutated_child2)
-
-            population = new_population
+            print(f"Melhor aptidão geral até agora: {global_best_fitness:.2f}%")
+            print(f"Melhores parâmetros gerais até agora: {global_best_individual}")
 
     print("\n--- Otimização Concluída ---")
     print(f"Melhores parâmetros encontrados: {best_individual}")
