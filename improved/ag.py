@@ -9,14 +9,14 @@ import multiprocessing
 from concurrent.futures import ProcessPoolExecutor, as_completed
 
 HYPERPARAMETER_SPACE = {
-    'pc_times': {'type': int, 'min': 1, 'max': 100},
-    'ghr_times': {'type': int, 'min': 1, 'max': 100},
-    'pc_ghr_times': {'type': int, 'min': 1, 'max': 100},
-    'lhr1_times': {'type': int, 'min': 1, 'max': 100},
-    'lhr2_times': {'type': int, 'min': 1, 'max': 100},
-    'lhr3_times': {'type': int, 'min': 1, 'max': 100},
-    'ga_times': {'type': int, 'min': 1, 'max': 100},
-    'lut_addr_size': {'type': int, 'min': 1, 'max': 64},
+    'pc_times': {'type': int, 'min': 1, 'max': 20},
+    'ghr_times': {'type': int, 'min': 1, 'max': 20},
+    'pc_ghr_times': {'type': int, 'min': 1, 'max': 20},
+    'lhr1_times': {'type': int, 'min': 1, 'max': 20},
+    'lhr2_times': {'type': int, 'min': 1, 'max': 20},
+    'lhr3_times': {'type': int, 'min': 1, 'max': 20},
+    'ga_times': {'type': int, 'min': 1, 'max': 20},
+    'lut_addr_size': {'type': int, 'min': 1, 'max': 32},
     'ghr_size': {'type': int, 'min': 1, 'max': 2000},
     'ga_branches': {'type': int, 'min': 1, 'max': 2000},
 }
@@ -190,7 +190,7 @@ if __name__ == '__main__':
     # Certifique-se de que este caminho do arquivo de entrada seja válido para o AG
     # Use um subconjunto do seu arquivo de traço para agilizar a otimização!
     # Por exemplo, crie um "trace_sample.txt" com 10.000 a 100.000 linhas
-    sample_input_file = "/Users/almenara/Git/branch_prediction/Dataset_pc_decimal/I1.txt" 
+    sample_input_file = "/home/almenara/bloom-wisard-branch-prediction/Dataset_pc_decimal/I1.txt" 
 
     # Execute o algoritmo genético
     best_params, final_best_fitness = genetic_algorithm(sample_input_file)

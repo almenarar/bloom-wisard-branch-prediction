@@ -82,13 +82,13 @@ class Model:
         self.ga = np.zeros(self.ga_lower * self.ga_branches, dtype=np.uint8)
 
         # Calcula o tamanho total da entrada
-        #self.input_size = (
-        #    self.pc_times * 24
-        #    + self.ghr_times * self.ghr_size
-        #    + self.pc_ghr_times * self.ghr_size
-        #    + sum(self.lhr_configs[i][0] * input_params[i + 2] for i in range(3))
-        #    + self.ga_times * len(self.ga)
-        #)
+        self.input_size = (
+            24
+            + self.ghr_size
+            + 24
+            + sum(self.lhr_configs[i][0] * input_params[i + 2] for i in range(3))
+            + len(self.ga)
+        )
 
     def extract_features(self, pc: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:  # Retorna tupla
         pc_bits = np.array(

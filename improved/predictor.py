@@ -98,9 +98,9 @@ class Model:
         #self.seed = input_params[13]
         self.ghr_size = input_params[8]
         self.ga_branches = input_params[9]
-        self.num_bloom_filters = 1
+        self.num_bloom_filters = 5
         self.num_hashes = 3
-        self.bleaching_threshold = 500
+        self.bleaching_threshold = 100
         self.seed = 390
 
         self.discriminators = [
@@ -240,18 +240,19 @@ class Model:
 
     def predict_and_train(self, pc, outcome):
         features = self.extract_features(pc)
-        input_pieces = self.get_input_pieces(
-            features, self.num_bloom_filters, self.seed
-        )
+        #input_pieces = self.get_input_pieces(
+        #    features, self.num_bloom_filters, self.seed
+        #)
+        features = "".join(list(map(str, features.tolist())))
 
-        count_0 = self.discriminators[0].get_count(input_pieces)
-        count_1 = self.discriminators[1].get_count(input_pieces)
+        count_0 = self.discriminators[0].get_count(features)
+        count_1 = self.discriminators[1].get_count(features)
 
         prediction = 0 if count_0 > count_1 else 1
 
         if prediction != outcome:
-            self.discriminators[outcome].train(input_pieces)
-            self.discriminators[prediction].forget(input_pieces)
+            self.discriminators[outcome].train(features)
+            self.discriminators[prediction].forget(features)
 
         self._update_histories(pc, outcome)
 

@@ -1,12 +1,33 @@
 I1
 
 Melhor aptidão geral até agora: 99.51%
-Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 14, 'lhr_lut_addr_size': 25, 'ghr_lut_addr_size': 22, 'ga_lut_addr_size': 30, 'xor_lut_addr_size': 26, 'pc_tournament_weight': 0.08433734939759037, 'lhr_tournament_weight': 0.22891566265060243, 'xor_tournament_weight': 0.012048192771084338, 'ga_tournament_weight': 0.5783132530120482, 'ghr_tournament_weight': 0.0963855421686747, 'ghr_size': 1950, 'ga_branches': 1466}
+Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 14,
+ 'lhr_lut_addr_size': 25, 
+ 'ghr_lut_addr_size': 22, 
+ 'ga_lut_addr_size': 30, 
+ 'xor_lut_addr_size': 26, 
+ 'pc_tournament_weight': 0.08433734939759037, 
+ 'lhr_tournament_weight': 0.22891566265060243,
+  'xor_tournament_weight': 0.012048192771084338,
+   'ga_tournament_weight': 0.5783132530120482, 
+   'ghr_tournament_weight': 0.0963855421686747, 
+   'ghr_size': 1950, 
+   'ga_branches': 1466}
 
 I2
 
 Melhor aptidão geral até agora: 99.83%
-Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 21, 'lhr_lut_addr_size': 32, 'ghr_lut_addr_size': 11, 'ga_lut_addr_size': 12, 'xor_lut_addr_size': 17, 'pc_tournament_weight': 0.1651376146788991, 'lhr_tournament_weight': 0.027522935779816515, 'xor_tournament_weight': 0.37614678899082576, 'ga_tournament_weight': 0.26605504587155965, 'ghr_tournament_weight': 0.1651376146788991, 'ghr_size': 825, 'ga_branches': 714}
+Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 21,
+ 'lhr_lut_addr_size': 32, 
+ 'ghr_lut_addr_size': 11,
+  'ga_lut_addr_size': 12, 
+  'xor_lut_addr_size': 17,
+   'pc_tournament_weight': 0.1651376146788991,
+    'lhr_tournament_weight': 0.027522935779816515,
+     'xor_tournament_weight': 0.37614678899082576,
+      'ga_tournament_weight': 0.26605504587155965,
+       'ghr_tournament_weight': 0.1651376146788991,
+        'ghr_size': 825, 'ga_branches': 714}
 
 M2
 
@@ -16,14 +37,45 @@ Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 26, 'lhr_lut_addr_s
 M1
 
 Melhor aptidão geral até agora: 91.27%
-Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 22, 'lhr_lut_addr_size': 14, 'ghr_lut_addr_size': 25, 'ga_lut_addr_size': 24, 'xor_lut_addr_size': 26, 'pc_tournament_weight': 0.0842551184668147, 'lhr_tournament_weight': 0.0, 'xor_tournament_weight': 0.25282230818343393, 'ga_tournament_weight': 0.04050835666826189, 'ghr_tournament_weight': 0.6224142166814894, 'ghr_size': 1215, 'ga_branches': 118}
+Melhores parâmetros gerais até agora: {
+    'pc_lut_addr_size': 22, 
+    'lhr_lut_addr_size': 14, 
+    'ghr_lut_addr_size': 25, 
+    'ga_lut_addr_size': 24,
+    'xor_lut_addr_size': 26, 
+    'pc_tournament_weight': 0.0842551184668147, 
+    'lhr_tournament_weight': 0.0, 
+    'xor_tournament_weight': 0.25282230818343393, 
+    'ga_tournament_weight': 0.04050835666826189,
+     'ghr_tournament_weight': 0.6224142166814894,
+      'ghr_size': 1215, 'ga_branches': 118}
 
 S1
 
 Melhor aptidão geral até agora: 93.41%
-Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 13, 'lhr_lut_addr_size': 27, 'ghr_lut_addr_size': 26, 'ga_lut_addr_size': 12, 'xor_lut_addr_size': 32, 'pc_tournament_weight': 0.11582153318302608, 'lhr_tournament_weight': 0.10413953798458252, 'xor_tournament_weight': 0.32543605620182037, 'ga_tournament_weight': 0.1878239196451406, 'ghr_tournament_weight': 0.2667789529854305, 'ghr_size': 234, 'ga_branches': 219}
+Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 13,
+ 'lhr_lut_addr_size': 27,
+  'ghr_lut_addr_size': 26,
+   'ga_lut_addr_size': 12,
+    'xor_lut_addr_size': 32,
+     'pc_tournament_weight': 0.11582153318302608,
+      'lhr_tournament_weight': 0.10413953798458252
+      , 'xor_tournament_weight': 0.32543605620182037,
+       'ga_tournament_weight': 0.1878239196451406,
+        'ghr_tournament_weight': 0.2667789529854305,
+         'ghr_size': 234, 'ga_branches': 219}
 
 S2
 
 Melhor aptidão geral até agora: 92.56%
-Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 14, 'lhr_lut_addr_size': 3, 'ghr_lut_addr_size': 28, 'ga_lut_addr_size': 6, 'xor_lut_addr_size': 20, 'pc_tournament_weight': 0.0981765802520763, 'lhr_tournament_weight': 0.09027382147017543, 'xor_tournament_weight': 0.4151577119552694, 'ga_tournament_weight': 0.10317008168020048, 'ghr_tournament_weight': 0.2932218046422784, 'ghr_size': 123, 'ga_branches': 477}
+Melhores parâmetros gerais até agora: {'pc_lut_addr_size': 14,
+ 'lhr_lut_addr_size': 3,
+  'ghr_lut_addr_size': 28,
+   'ga_lut_addr_size': 6,
+    'xor_lut_addr_size': 20,
+     'pc_tournament_weight': 0.0981765802520763,
+      'lhr_tournament_weight': 0.09027382147017543,
+       'xor_tournament_weight': 0.4151577119552694,
+        'ga_tournament_weight': 0.10317008168020048, 
+        'ghr_tournament_weight': 0.2932218046422784,
+         'ghr_size': 123, 'ga_branches': 477}

@@ -78,7 +78,7 @@ def main():
                 accuracy = (num_predicted / num_branches) * 100
                 branches_processed.append(num_branches)
                 accuracies.append(accuracy)
-                predictor.apply_bleaching()
+                #predictor.apply_bleaching()
                 print(f"Branch number: {num_branches}")
                 print(f"----- Partial Accuracy: {accuracy:.4f}\n")
 

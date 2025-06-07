@@ -9,23 +9,28 @@ from model import Model
 def main():
     parser = argparse.ArgumentParser(description="BTHOWeN Predictor")
     parser.add_argument("input_file", type=str)
-    parser.add_argument("num_pc_filters", type=int, default=2, nargs="?")
-    parser.add_argument("num_lhr_filters", type=int, default=2, nargs="?")
-    parser.add_argument("num_ghr_filters", type=int, default=2, nargs="?")
-    parser.add_argument("num_xor_filters", type=int, default=2, nargs="?")
+    #parser.add_argument("num_pc_filters", type=int, default=2, nargs="?")
+    #parser.add_argument("num_lhr_filters", type=int, default=2, nargs="?")
+    #parser.add_argument("num_ghr_filters", type=int, default=2, nargs="?")
+    #parser.add_argument("num_xor_filters", type=int, default=2, nargs="?")
     parser.add_argument("pc_lut_addr_size", type=int, default=4, nargs="?")
     parser.add_argument("lhr_lut_addr_size", type=int, default=4, nargs="?")
     parser.add_argument("ght_lut_addr_size", type=int, default=4, nargs="?")
+    parser.add_argument("ga_lut_addr_size", type=int, default=4, nargs="?")
     parser.add_argument("xor_lut_addr_size", type=int, default=4, nargs="?")
-    parser.add_argument("pc_bleaching_threshold", type=int, default=2, nargs="?")
-    parser.add_argument("lhr_bleaching_threshold", type=int, default=2, nargs="?")
-    parser.add_argument("ght_bleaching_threshold", type=int, default=2, nargs="?")
-    parser.add_argument("xor_bleaching_threshold", type=int, default=2, nargs="?")
-    parser.add_argument("pc_tournament_weight", type=int, default=5, nargs="?")
-    parser.add_argument("lhr_tournament_weight", type=int, default=2, nargs="?")
-    parser.add_argument("ga_tournament_weight", type=int, default=2, nargs="?")
-    parser.add_argument("xor_tournament_weight", type=int, default=3, nargs="?")
-    parser.add_argument("num_hashes", type=int, default=3, nargs="?")
+    #parser.add_argument("pc_bleaching_threshold", type=int, default=2, nargs="?")
+    #parser.add_argument("lhr_bleaching_threshold", type=int, default=2, nargs="?")
+    #parser.add_argument("ght_bleaching_threshold", type=int, default=2, nargs="?")
+    #parser.add_argument("xor_bleaching_threshold", type=int, default=2, nargs="?")
+    parser.add_argument("pc_tournament_weight", type=float, default=5, nargs="?")
+    parser.add_argument("lhr_tournament_weight", type=float, default=2, nargs="?")
+    parser.add_argument("ghr_tournament_weight", type=float, default=2, nargs="?")
+    parser.add_argument("ga_tournament_weight", type=float, default=2, nargs="?")
+    parser.add_argument("xor_tournament_weight", type=float, default=3, nargs="?")
+    #parser.add_argument("ghr_lut_addr_size", type=int, default=4, nargs="?")
+    #parser.add_argument("num_hashes", type=int, default=3, nargs="?")
+    parser.add_argument("ghr_size", type=int, default=4, nargs="?")
+    parser.add_argument("ga_branches", type=int, default=4, nargs="?")
     parser.add_argument("--params_file", type=str)
 
     args = parser.parse_args()
@@ -47,28 +52,38 @@ def main():
             )
     else:
         parameters = [
-            args.num_pc_filters,
-            args.num_lhr_filters,
-            args.num_ghr_filters,
-            args.num_xor_filters,
+            1,
+            1,
+            1,
+            1,
+            1,
             args.pc_lut_addr_size,
             args.lhr_lut_addr_size, 
             args.ght_lut_addr_size,
+            args.ga_lut_addr_size,
             args.xor_lut_addr_size,
-            args.pc_bleaching_threshold,
-            args.lhr_bleaching_threshold,
-            args.ght_bleaching_threshold,
-            args.xor_bleaching_threshold,
+            0,
+            0,
+            0,
+            0,
+            0,
             args.pc_tournament_weight,
             args.lhr_tournament_weight,
             args.ga_tournament_weight,
+            args.ghr_tournament_weight,
             args.xor_tournament_weight,
-            args.num_hashes,
+            3,
+            3,
+            3,
+            3,
+            3,
+            args.ghr_size,
+            args.ga_branches
         ]
         #print(parameters)
 
     predictor = Model(parameters)
-    #print(f"Input size: {predictor.input_size}")
+    print(f"Input size: {predictor.input_size}")
 
     num_branches = 0
     num_predicted = 0
@@ -86,7 +101,7 @@ def main():
                 accuracy = (num_predicted / num_branches) * 100
                 branches_processed.append(num_branches)
                 accuracies.append(accuracy)
-                predictor.apply_bleaching()
+                #predictor.apply_bleaching()
                 print(f"Branch number: {num_branches}")
                 print(f"----- Partial Accuracy: {accuracy:.4f}\n")
 
@@ -123,7 +138,7 @@ def main():
     print(f"Not predicted branches: {num_branches - num_predicted}")
     print(f"Accuracy: {final_accuracy:.4f}")
     print(f"\n------ Size of ntuple (address_size): {parameters[0]}")
-    #print(f"------ Size of each input: {predictor.input_size}")
+    print(f"------ Size of each input: {predictor.input_size}")
 
 
 if __name__ == "__main__":
