@@ -1,16 +1,12 @@
-# Mova a lógica principal da main() para uma função separada
 from model import Model
 
-
 def run_predictor_with_params(params: dict, input_file: str) -> float:
-    # Mapeie o dicionário 'params' para a lista de parâmetros esperada pelo seu Model
-    # Exemplo (ajuste os índices conforme seu Model __init__):
     model_params_list = [
         1,#params['num_pc_filters'],
         1,#params['num_lhr_filters'],
         1,#params['num_ghr_filters'],
         1,#params['num_ga_filters'],
-        1,#params['num_xor_filters'], # ... e assim por diante para todos os lhrN_times
+        1,#params['num_xor_filters'], 
         params['pc_lut_addr_size'],
         params['lhr_lut_addr_size'],
         params['ghr_lut_addr_size'],
@@ -21,7 +17,7 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
         2000,#params['ghr_bleaching_threshold'],
         2000,#params['ga_bleaching_threshold'],
         2000,#params['xor_bleaching_threshold'],
-        params['pc_tournament_weight'], # Seed fixa para a AG, ou otimize ela tbm
+        params['pc_tournament_weight'], 
         params['lhr_tournament_weight'],
         params['ga_tournament_weight'],
         params['xor_tournament_weight'],
@@ -35,11 +31,8 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
         params['ga_branches'],
     ]
 
-    # Crie uma instância do Model com esses parâmetros
-    predictor = Model(model_params_list) # Ajuste o Model.__init__ para aceitar um dicionário ou lista ordenada
+    predictor = Model(model_params_list) 
 
-    branches_processed = []
-    accuracies = []
     num_branches = 0
     num_predicted = 0
     interval = 2000
@@ -53,14 +46,14 @@ def run_predictor_with_params(params: dict, input_file: str) -> float:
             num_branches += 1
             if predictor.predict_and_train(pc, outcome):
                 num_predicted += 1
+            # descomente para ativar o bleaching
             #if num_branches % interval == 0:
             #    predictor.apply_bleaching()
 
     if num_branches == 0:
-        return 0.0 # Evita divisão por zero
-    return (num_predicted / num_branches) * 100.0 # Retorna a precisão em %
+        return 0.0 
+    return (num_predicted / num_branches) * 100.0 
 
-# A função de aptidão
 def fitness_function(individual_params: dict, input_file: str) -> float:
     accuracy = run_predictor_with_params(individual_params, input_file)
     return accuracy

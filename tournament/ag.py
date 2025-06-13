@@ -42,9 +42,9 @@ POPULATION_SIZE = 20
 NUM_GENERATIONS = 50
 MUTATION_RATE = 0.15
 CROSSOVER_RATE = 0.85
-ELITISM_COUNT = 2 # Quantos melhores indivíduos passam direto para a próxima geração
-STAGNATION_THRESHOLD = 3 # Número de gerações sem melhoria para reiniciar
-RESTART_ELITISM_COUNT = 2 # Quantos melhores indivíduos manter no reinício
+ELITISM_COUNT = 2 
+STAGNATION_THRESHOLD = 3 
+RESTART_ELITISM_COUNT = 2
 
 def generate_individual() -> dict:
     individual = {}
@@ -52,7 +52,6 @@ def generate_individual() -> dict:
         if spec['type'] == int:
             individual[param] = random.randint(spec['min'], spec['max'])
         elif spec['type'] == float:
-            # Para floats, gere um valor e arredonde para o passo
             val = random.uniform(spec['min'], spec['max'])
             if 'step' in spec:
                 individual[param] = round(val / spec['step']) * spec['step']
@@ -72,10 +71,8 @@ def create_initial_population(size: int) -> List[dict]:
     return [generate_individual() for _ in range(size)]
 
 def select_parents(population_with_fitness: List[Tuple[dict, float]]) -> Tuple[dict, dict]:
-    # Seleção por roleta ou torneio é comum. Roleta é mais simples para começar.
-    # Soma de todas as aptidões para normalização
     total_fitness = sum(f for _, f in population_with_fitness)
-    if total_fitness == 0: # Evitar divisão por zero se todas as aptidões forem 0
+    if total_fitness == 0: 
         return random.choice(population_with_fitness)[0], random.choice(population_with_fitness)[0]
 
     pick1 = random.uniform(0, total_fitness)
@@ -97,14 +94,12 @@ def crossover(parent1: dict, parent2: dict) -> Tuple[dict, dict]:
     child1 = parent1.copy()
     child2 = parent2.copy()
     if random.random() < CROSSOVER_RATE:
-        # Ponto de crossover aleatório
         keys = list(HYPERPARAMETER_SPACE.keys())
         crossover_point = random.randint(1, len(keys) - 1)
         for i in range(crossover_point):
             key = keys[i]
             child1[key], child2[key] = child2[key], child1[key]
 
-        # Re-normalizar pesos após crossover se eles foram combinados
         if 'pc_tournament_weight' in child1:
             total_weight1 = child1['pc_tournament_weight'] + child1['lhr_tournament_weight'] + child1['ga_tournament_weight'] + child1['xor_tournament_weight'] + child1['ghr_tournament_weight']
             total_weight2 = child2['pc_tournament_weight'] + child2['lhr_tournament_weight'] + child2['ga_tournament_weight'] + child2['xor_tournament_weight'] + child2['ghr_tournament_weight']
@@ -134,7 +129,7 @@ def mutate(individual: dict) -> dict:
                     mutated_individual[param] = round(val / spec['step']) * spec['step']
                 else:
                     mutated_individual[param] = val
-    # Re-normalizar pesos após mutação
+
     if 'pc_tournament_weight' in mutated_individual:
         total_weight = mutated_individual['pc_tournament_weight'] + mutated_individual['lhr_tournament_weight'] + mutated_individual['ga_tournament_weight'] + mutated_individual['xor_tournament_weight'] + mutated_individual['ghr_tournament_weight']
         if total_weight > 0:
@@ -151,9 +146,7 @@ def genetic_algorithm(input_file: str):
     population = create_initial_population(POPULATION_SIZE)
     best_individual = None
     best_fitness = -1.0
-    generations_since_last_improvement = 0 # Contador de estagnação
-    
-    # Armazena o melhor indivíduo geral encontrado
+    generations_since_last_improvement = 0
     global_best_individual = None
     global_best_fitness = -1.0
 
@@ -167,7 +160,7 @@ def genetic_algorithm(input_file: str):
             }
 
             population_with_fitness = []
-            current_generation_best_fitness = -1.0 # Melhor fitness desta geração
+            current_generation_best_fitness = -1.0 
 
             for i, future in enumerate(as_completed(futures)):
                 individual = futures[future]
@@ -182,38 +175,31 @@ def genetic_algorithm(input_file: str):
                     if fitness > global_best_fitness:
                         global_best_fitness = fitness
                         global_best_individual = individual.copy()
-                        generations_since_last_improvement = 0 # Resetar contador se houver melhoria global
+                        generations_since_last_improvement = 0 
                 except Exception as exc:
                     print(f"  Indivíduo {i+1} gerou uma exceção: {exc}", file=sys.stderr)
-                    # O indivíduo que gerou exceção já terá fitness 0.0 da função run_predictor_with_params
 
-            # Verifica estagnação e reinicia a população se necessário
             if current_generation_best_fitness <= (global_best_fitness):
                 generations_since_last_improvement += 1
                 print(f"Estagnação detectada: {generations_since_last_improvement}/{STAGNATION_THRESHOLD} gerações sem melhora significativa.")
             else:
-                generations_since_last_improvement = 0 # Melhoria significativa, resetar contador
+                generations_since_last_improvement = 0
 
             if generations_since_last_improvement >= STAGNATION_THRESHOLD:
                 print(f"Limite de estagnação atingido ({STAGNATION_THRESHOLD} gerações)! Reiniciando população...")
                 
-                # Ordenar a população por aptidão (do maior para o menor)
                 population_with_fitness.sort(key=lambda x: x[1], reverse=True)
-
                 new_population = []
-                # Manter os melhores indivíduos do reinício
                 for i in range(min(RESTART_ELITISM_COUNT, POPULATION_SIZE)):
                     new_population.append(population_with_fitness[i][0])
                 
-                # Gerar o restante da população aleatoriamente
                 while len(new_population) < POPULATION_SIZE:
                     new_population.append(generate_individual())
                 
                 population = new_population
-                generations_since_last_improvement = 0 # Resetar após o reinício
-                # Não precisa resetar global_best_fitness, pois queremos o melhor geral
+                generations_since_last_improvement = 0 
                 
-            else: # Se não houver reinício, continue com a evolução normal
+            else: 
                 population_with_fitness.sort(key=lambda x: x[1], reverse=True)
                 new_population = []
                 for i in range(min(ELITISM_COUNT, POPULATION_SIZE)):
@@ -238,22 +224,11 @@ def genetic_algorithm(input_file: str):
     print(f"Melhor precisão alcançada: {best_fitness:.2f}%")
     return best_individual, best_fitness
 
-# Exemplo de uso:
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description="BTHOWeN Predictor")
     parser.add_argument("input_file", type=str)
     args = parser.parse_args()
-    # Certifique-se de que este caminho do arquivo de entrada seja válido para o AG
-    # Use um subconjunto do seu arquivo de traço para agilizar a otimização!
-    # Por exemplo, crie um "trace_sample.txt" com 10.000 a 100.000 linhas
+
     sample_input_file = f"/home/almenara/bloom-wisard-branch-prediction/Dataset_pc_decimal/{args.input_file}.txt" 
-
-    # Execute o algoritmo genético
     best_params, final_best_fitness = genetic_algorithm(sample_input_file)
-
-    # Opcional: Execute o preditor com os melhores parâmetros no trace COMPLETO para validação
-    #print("\nValidando os melhores parâmetros no trace completo...")
-    #full_input_file = "path/to/your/full_trace.txt" # <-- MUDAR AQUI!
-    #final_accuracy_full_trace = run_predictor_with_params(best_params, full_input_file)
-    #print(f"Precisão final no trace completo com os melhores parâmetros: {final_accuracy_full_trace:.2f}%")

@@ -62,11 +62,11 @@ def main():
             args.ght_lut_addr_size,
             args.ga_lut_addr_size,
             args.xor_lut_addr_size,
-            0,
-            0,
-            0,
-            0,
-            0,
+            8000,
+            8000,
+            8000,
+            8000,
+            8000,
             args.pc_tournament_weight,
             args.lhr_tournament_weight,
             args.ga_tournament_weight,
@@ -101,7 +101,7 @@ def main():
                 accuracy = (num_predicted / num_branches) * 100
                 branches_processed.append(num_branches)
                 accuracies.append(accuracy)
-                #predictor.apply_bleaching()
+                predictor.apply_bleaching()
                 print(f"Branch number: {num_branches}")
                 print(f"----- Partial Accuracy: {accuracy:.4f}\n")
 

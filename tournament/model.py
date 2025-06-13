@@ -59,29 +59,23 @@ class Model:
             for _ in range(2)
         ]
 
-        # Inicializa o registro de história global
         #self.ghr_size = 24
         self.ghr = np.zeros(self.ghr_size, dtype=np.uint8)
 
-        # Configurações dos registros de história local
         self.lhr_configs = [
             (24, 12),  # (comprimento, bits_pc) para LHR1
             (9, 9),  # LHR2
             (5, 5),  # LHR3
         ]
 
-        # Inicializa os LHRs
         self.lhrs = []
         for length, bits_pc in self.lhr_configs:
             lhr_size = 1 << bits_pc
             self.lhrs.append(np.zeros((lhr_size, length), dtype=np.uint8))
 
-        # Inicializa o endereço global
         self.ga_lower = 8
-        #self.ga_branches = self.ga_branches
         self.ga = np.zeros(self.ga_lower * self.ga_branches, dtype=np.uint8)
 
-        # Calcula o tamanho total da entrada
         self.input_size = (
             24
             + self.ghr_size
@@ -90,7 +84,7 @@ class Model:
             + len(self.ga)
         )
 
-    def extract_features(self, pc: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:  # Retorna tupla
+    def extract_features(self, pc: int) -> Tuple[np.ndarray, np.ndarray, np.ndarray]: 
         pc_bits = np.array(
             [int(b) for b in format(pc & ((1 << 24) - 1), "024b")], dtype=np.uint8
         )
@@ -143,7 +137,6 @@ class Model:
         return pc_pieces, xor_pieces, lhr_pieces, ghr_pieces, ga_pieces
 
     def _get_pieces(self, features: np.ndarray, num_filters: int, seed: int) -> List[bytes]:
-        # ... (lógica de get_input_pieces existente, adaptada para receber um único array de features) ...
         binary_input = "".join(list(map(str, features.tolist())))
         #indices = list(range(len(binary_input)))
         #random.seed(seed)
@@ -191,7 +184,7 @@ class Model:
             ghr_count_1,
             ga_count_0, 
             ga_count_1
-        )  # Lógica do torneio
+        )
 
         if prediction != outcome:
             self.pc_discriminators[outcome].train(pc_pieces)
@@ -243,13 +236,10 @@ class Model:
         for disc in self.xor_discriminators:
             disc.binarize(self.xor_bleaching_threshold)
 
-    # Atualiza todos os registros de histórico
     def _update_histories(self, pc: int, outcome: int):
-        # Atualiza GHR
         self.ghr = np.roll(self.ghr, -1)
         self.ghr[-1] = outcome
 
-        # Atualiza LHRs
         pc_bits = np.array(
             [int(b) for b in format(pc & ((1 << 24) - 1), "024b")], dtype=np.uint8
         )
@@ -258,7 +248,6 @@ class Model:
             self.lhrs[i][index] = np.roll(self.lhrs[i][index], -1)
             self.lhrs[i][index][-1] = outcome
 
-        # Atualiza GA
         new_bits = pc_bits[-self.ga_lower :]
         self.ga = np.roll(self.ga, -self.ga_lower)
         self.ga[-self.ga_lower :] = new_bits
